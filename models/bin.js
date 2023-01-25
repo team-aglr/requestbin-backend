@@ -26,9 +26,8 @@ async function binByUUID(id) {
 
 async function newBin() {
   try {
-    await client.query("INSERT INTO bins DEFAULT VALUES");
-    const newUUID = await client.query("SELECT uuid FROM bins ORDER BY id DESC LIMIT 1");
-    return newUUID.rows;
+    const newUUID = await client.query("INSERT INTO bins DEFAULT VALUES RETURNING id");
+    return newUUID.rows[0];
   } catch (error) {
     console.error(error);
   }
