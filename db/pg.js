@@ -22,18 +22,21 @@
 
 require ("dotenv").config();
 
-const { Client } = require("pg");
+const { Pool, Client } = require("pg");
 const client = new Client({
-  user: process.env.PSQL_USERNAME,
-  host: process.env.PSQL_HOST, // update when we open a new TCP tunnel
-  database: process.env.PSQL_DB_NAME,
-  password: process.env.PSQL_PASSWORD,
-  port: process.env.PSQL_PORT, // update when we open a new TCP tunnel
+  connectionString: process.env.PSQL_CONNECTION_STRING
 });
 
-client
-  .connect()
-  .then(() => console.log('Connected to PG'))
-  .catch((err) => console.log("Error connecting to PG:", err.stack))
+client.connect(err => {
+  if (err) {
+    return console.error('Could not connect to PostgreSQL', err);
+  }
+  client.query('SELECT NOW() AS "theTime"', (err, result) => {
+    if (err) return console.error('Error running query', err);
+    console.log(`Connected to PG: ${result.rows[0].theTime}`);
+
+    client.end();
+  });
+});
 
 module.exports = client;
