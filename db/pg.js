@@ -19,3 +19,21 @@
 // }
 
 // module.exports = query;
+
+require ("dotenv").config();
+
+const { Client } = require("pg");
+const client = new Client({
+  user: process.env.PSQL_USERNAME,
+  host: process.env.PSQL_HOST, // update when we open a new TCP tunnel
+  database: process.env.PSQL_DB_NAME,
+  password: process.env.PSQL_PASSWORD,
+  port: process.env.PSQL_PORT, // update when we open a new TCP tunnel
+});
+
+client
+  .connect()
+  .then(() => console.log('Connected to PG'))
+  .catch((err) => console.log("Error connecting to PG:", err.stack))
+
+module.exports = client;
