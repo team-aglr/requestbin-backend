@@ -6,14 +6,10 @@ CREATE TABLE bins (
   uuid uuid NOT NULL DEFAULT uuid_generate_v4()
 );
 
-CREATE TYPE IF NOT EXISTS http_method AS ENUM ('GET', 'POST', 'PUT', 'DELETE');
-
 DROP TABLE IF EXISTS requests;
 CREATE TABLE requests (
   id int PRIMARY KEY,
-  http_method http_method,
+  http_method varchar(10),
   timestamp timestamp WITH TIME ZONE,
   bin_id int REFERENCES bins(id) ON DELETE CASCADE
 );
-
-INSERT INTO bins DEFAULT VALUES;
