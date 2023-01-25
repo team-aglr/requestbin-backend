@@ -15,12 +15,12 @@ async function allBins() {
 }
 
 async function binByUUID(id) {
- try{
-   const bin = await client.query("SELECT id FROM bins WHERE uuid = $1", [id]); 
-   return bin.rows[0];
- } catch (error) {
-   console.error(error);
- } 
+  try {
+    const bin = await client.query("SELECT id FROM bins WHERE uuid = $1", [id]);
+    return bin.rows[0];
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function newBin() {
