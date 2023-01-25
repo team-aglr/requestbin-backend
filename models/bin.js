@@ -32,9 +32,11 @@ async function newBin() {
   }
 }
 
-export default {
+const Bin = {
   newBin,
-  allBins,
-  binByUUID
-};
+  binByUUID,
+  allBins
+}
+
+module.exports = Bin;
 
