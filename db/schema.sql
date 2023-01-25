@@ -1,10 +1,12 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 DROP TABLE IF EXISTS bins;
 CREATE TABLE bins (
   id serial PRIMARY KEY,
   uuid uuid NOT NULL DEFAULT uuid_generate_v4()
 );
 
-CREATE TYPE http_method AS ENUM ('GET', 'POST', 'PUT', 'DELETE');
+CREATE TYPE IF NOT EXISTS http_method AS ENUM ('GET', 'POST', 'PUT', 'DELETE');
 
 DROP TABLE IF EXISTS requests;
 CREATE TABLE requests (
