@@ -31,6 +31,9 @@ const client = new Client({
   port: process.env.PSQL_PORT, // update when we open a new TCP tunnel
 });
 
-client.connect();
+client
+  .connect()
+  .then(() => console.log('Connected to PG'))
+  .catch((err) => console.log("Error connecting to PG:", err.stack))
 
 module.exports = client;
