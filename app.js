@@ -7,7 +7,6 @@ require("./db/pg.js");
 
 // Logging
 const morgan = require("morgan");
-const router = require("./controllers/collect");
 app.use(morgan("tiny"));
 
 // Collect API
@@ -16,9 +15,9 @@ app.use('/collect', collectRouter)
 
 // Requests and Bins APIs
 const requestController = require('./controllers/requests.js');
-router.use('/api/bins/:uuid/requests', requestController)
+app.use('/api/bins/:uuid/requests', requestController)
 
 const binController = require('./controllers/bins.js');
-router.use('/api/bins', binController)
+app.use('/api/bins', binController)
 
 module.exports = app;
