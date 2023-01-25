@@ -26,7 +26,7 @@ async function binByUUID(id) {
 
 async function newBin() {
   try {
-    const newUUID = await client.query("INSERT INTO bins DEFAULT VALUES RETURNING id");
+    const newUUID = await client.query("INSERT INTO bins DEFAULT VALUES RETURNING uuid");
     return newUUID.rows[0];
   } catch (error) {
     console.error(error);
