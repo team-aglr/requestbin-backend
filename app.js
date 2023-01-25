@@ -15,10 +15,10 @@ const collectRouter = require('./controllers/collect');
 app.use('/collect', collectRouter)
 
 // Requests and Bins APIs
-const requestController = require('./controllers/collect');
+const requestController = require('./controllers/requests.js');
 router.use('/api/bins/:uuid/requests', requestController)
 
-const binController = require('./controllers/binController');
+const binController = require('./controllers/bins.js');
 router.use('/api/bins', binController)
 
 module.exports = app;
