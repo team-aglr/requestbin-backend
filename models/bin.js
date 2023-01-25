@@ -7,13 +7,12 @@ const client = require('../db/pg.js');
 
 async function allBins() {
   try {
-    const bins = await client.query("SELECT * FROM bins");
+    const bins = await client.query("SELECT * FROM bins ORDER BY created_at DESC");
     return bins.rows;
   } catch (error) {
     console.error(error);
   }
 }
-
 
 async function binByUUID(id) {
  try{
