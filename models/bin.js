@@ -32,10 +32,20 @@ async function newBin() {
   }
 }
 
+async function validUUID(uuid) {
+  if (!(typeof(uuid) === 'string' && uuid.length === 8)) {
+    return false
+  }
+
+  const exists = await client.query("SELECT EXISTS (SELECT 1 FROM bins WHERE uuid = $1 LIMIT 1);", [uuid])
+  return exists.rows[0].exists
+}
+
 const Bin = {
   newBin,
   binByUUID,
-  allBins
+  allBins,
+  validUUID,
 }
 
 module.exports = Bin;
