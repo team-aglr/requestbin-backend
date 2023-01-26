@@ -27,13 +27,7 @@ async function binByUUID(id) {
 
 async function deleteBin(id) {
   try {
-    const bin = await client.query("SELECT id FROM bins WHERE id = $1", [id]);
-    console.log(bin.rows[0])
-    if (bin.rows[0]) {
-      await client.query("DELETE FROM bins WHERE id = $1", [id]);
-      return true;
-    }
-    return false;
+    await client.query("DELETE FROM bins WHERE id = $1", [id]);
   } catch (error) {
     console.log(error);
   }
@@ -67,6 +61,7 @@ const Bin = {
   binByUUID,
   allBins,
   validUUID,
+  deleteBin,
 };
 
 module.exports = Bin;

@@ -22,4 +22,14 @@ router.post("/", async(request, response) => {
   }
 });
 
+router.delete("/:id", async(request, response) => {
+  try {
+    await binModel.deleteBin(request.params.id)
+    response.status(204).send()
+  } catch (error) {
+    console.log(error)
+    response.status(500).send(error)
+  }
+})
+
 module.exports = router;
