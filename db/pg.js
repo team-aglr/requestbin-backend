@@ -1,42 +1,35 @@
-// Export a function that connects to postgres
+require("dotenv").config();
 
-// Example from my app
+const { Pool } = require("pg");
 
-// require("dotenv").config();
-
-// const { Pool } = require("pg");
-
-// console.log(process.env.DB_PASSWORD);
-
-// const pool = new Pool({
-//   database: process.env.DB_NAME,
-//   username: process.env.DB_USER_USERNAME,
-//   password: process.env.DB_USER_PASSWORD,
-// });
-
-// async function query(text, params) {
-//   return await pool.query(text, params);
-// }
-
-// module.exports = query;
-
-require ("dotenv").config();
-
-const { Pool, Client } = require("pg");
-const client = new Client({
-  connectionString: process.env.PSQL_CONNECTION_STRING
+const pool = new Pool({
+  database: process.env.PSQL_DB_NAME,
+  user: process.env.PSQL_USERNAME,
+  password: process.env.PSQL_PASSWORD,
 });
 
-client.connect(err => {
-  if (err) {
-    return console.error('Could not connect to PostgreSQL', err);
-  }
-  client.query('SELECT NOW() AS "theTime"', (err, result) => {
-    if (err) return console.error('Error running query', err);
-    console.log(`Connected to PG: ${result.rows[0].theTime}`);
+function checkPGConnection() {
+  pool.connect((err, client, release) => {
+    if (err) {
+      return console.error('Error connecting to PG: ', err.stack)
+    }
+    client.query('SELECT NOW()', (err, result) => {
+      release()
+      if (err) {
+        return console.error('Error executing PG query: ', err.stack)
+      }
+      console.log(`Connected to PG: ${result.rows[0].now}`)
+    })
+  })
+}
 
-    client.end();
-  });
-});
+async function query(text, params) {
+  return pool.query(text, params);
+}
+
+const client = {
+  query,
+  checkPGConnection
+};
 
 module.exports = client;
