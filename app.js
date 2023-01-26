@@ -18,4 +18,11 @@ app.use(morgan("tiny"));
 const collectRouter = require("./controllers/collect");
 app.use("/collect", collectRouter);
 
+// Requests and Bins APIs
+const requestController = require('./controllers/requests.js');
+app.use('/api/bins/:uuid/requests', requestController)
+
+const binController = require('./controllers/bins.js');
+app.use('/api/bins', binController)
+
 module.exports = app;
