@@ -1,12 +1,7 @@
-/*
-Important Notes
-· Currently this is using my local version of postgres, which is why its importing localpg.js
-· If you want to use the web version, just import pg.js instead
-· If you want to use a local version, create a DB on your machine called test_bin with no username or pw, and run the schema.sql document on it
-*/
+const client = require("../db/pg.js");
+const Bin = require("./bin.js");
 
-const client = require("../db/localpg.js");
-const binService = require("./bin.js");
+// MongoDB end of requests
 const mongoose = require("mongoose");
 
 const requestSchema = new mongoose.Schema({
@@ -18,42 +13,60 @@ const requestSchema = new mongoose.Schema({
 
 const Request = mongoose.model("Request", requestSchema);
 
+// Methods for Request model
 async function addRequest(uuid, method, head, body) {
   try {
-    const binId = binService.binByUUID(uuid);
+    const { id: binId } = await Bin.binByUUID(uuid);
+    console.log(binId)
 
     // Insert the request into the "requests" postgres table which links a request to a bin_id
     // The "Returning" keyword gives us back the id of the row we just added in the response
-    const response = await client.query(
+    const request = await client.query(
       "INSERT INTO requests (http_method, bin_id) VALUES ($1, $2) RETURNING id",
       [method, binId]
     );
+
     // Get the primary key for the requests row that you just added
-    const requestId = response.rows[0].id;
+    const requestId = request.rows[0].id;
+
     // Create a new request object
-    const request = new Request({
+    const mongoRequest = new Request({
       requestId,
       binId,
       documentHead: head,
       documentBody: body,
     });
     // Save the request object to mongo
-    request.save();
+    mongoRequest.save();
+    return requestId
   } catch (error) {
     console.log(error);
   }
 }
 
-// Get all of the requests for a bin based on its UUID
+// Get all of the requests for a bin based on its UUID from PG
+// Returns array of objects
 async function getRequestsByBinUUID(uuid) {
-  const binId = Number(binService.binByUUID(uuid));
-  const requests = await Request.find({ binId });
-  return requests;
+  try {
+    const bin = await client.query("SELECT requests.id AS id, http_method, \
+      requests.created_at AS created_at, uuid\
+      FROM requests JOIN bins ON bin_id = bins.id WHERE uuid = $1", [uuid]);
+    return bin.rows;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-// Get the data for one specific webhook request based on its ID
+// Get the data for one specific webhook request based on its ID from PG and Mongo
+// Returns an object
 async function getRequestByRequestID(requestId) {
-  const request = await Request.findOne({ requestId });
+  const requests = await client.query("SELECT * FROM requests WHERE id = $1", [requestId])
+  const request = requests.rows[0];
+
+  const { documentHead, documentBody } = await Request.findOne({ requestId });
+
+  request.head = documentHead;
+  request.body = documentBody;
   return request;
 }
 
