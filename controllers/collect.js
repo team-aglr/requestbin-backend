@@ -1,6 +1,5 @@
 // Listening for requests from webhooks
 // Sends the requests to our PG and Mongo databases
-Request = require("../models/request");
 const { addRequest, getRequestByRequestID } = require("../models/request");
 const collectRouter = require("express").Router();
 const bodyParser = require("body-parser");
