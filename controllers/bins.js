@@ -4,7 +4,7 @@ const binModel = require('../models/bin.js');
 const express = require('express');
 const router =  express.Router();
 
-router.get("/", (request, response) => {
+router.get("/", async(request, response) => {
   try {
     const bins = await binModel.allBins();
     response.status(200).json(bins);
@@ -13,7 +13,7 @@ router.get("/", (request, response) => {
   }
 });
 
-router.post("/", (request, response) => {
+router.post("/", async(request, response) => {
   try {
     const newUUID = await binModel.newBin().uuid;
     response.status(200).send(newUUID);
