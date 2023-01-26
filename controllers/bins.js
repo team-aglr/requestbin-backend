@@ -1,6 +1,7 @@
 // Creating a new bin & displaying all bins
 
 const binModel = require('../models/bin.js');
+const requestModel = require('../models/request')
 const express = require('express');
 const router =  express.Router();
 
@@ -23,8 +24,10 @@ router.post("/", async(request, response) => {
 });
 
 router.delete("/:id", async(request, response) => {
+  const binId = request.params.id
   try {
-    await binModel.deleteBin(request.params.id)
+    await binModel.deleteBin(binId)
+    await requestModel.deleteAllPerBin(binId)
     response.status(204).send()
   } catch (error) {
     console.log(error)

@@ -56,6 +56,11 @@ async function getRequestsByBinUUID(uuid) {
   }
 }
 
+async function deleteAllPerBin(binId) {
+  const res = await Request.deleteMany({ binId })
+  return res.acknowledged
+}
+
 // Get the data for one specific webhook request based on its ID from PG and Mongo
 // Returns an object
 async function getRequestByRequestID(requestId) {
@@ -73,4 +78,5 @@ module.exports = {
   addRequest,
   getRequestsByBinUUID,
   getRequestByRequestID,
+  deleteAllPerBin,
 };
