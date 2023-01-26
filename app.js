@@ -3,7 +3,7 @@ const app = express();
 
 // Connect to databases
 require("./db/mongo.js");
-require("./db/pg.js");
+require("./db/pg.js").checkPGConnection();
 
 // Logging
 const morgan = require("morgan");
