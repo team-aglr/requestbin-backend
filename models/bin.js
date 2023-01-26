@@ -25,6 +25,20 @@ async function binByUUID(id) {
   }
 }
 
+async function deleteBin(id) {
+  try {
+    const bin = await client.query("SELECT id FROM bins WHERE id = $1", [id]);
+    console.log(bin.rows[0])
+    if (bin.rows[0]) {
+      await client.query("DELETE FROM bins WHERE id = $1", [id]);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function newBin() {
   try {
     const newUUID = await client.query(
