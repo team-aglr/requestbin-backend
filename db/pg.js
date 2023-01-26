@@ -4,8 +4,8 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   database: process.env.PSQL_DB_NAME,
-  // username: process.env.DB_USER_USERNAME,
-  // password: process.env.DB_USER_PASSWORD,
+  user: process.env.PSQL_USERNAME,
+  password: process.env.PSQL_PASSWORD,
 });
 
 function checkPGConnection() {
