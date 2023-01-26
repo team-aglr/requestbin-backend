@@ -1,17 +1,19 @@
 const requestRouter = require('express').Router({ mergeParams: true })
 const request = require('../models/request')
+const bin = require('../models/bin')
 
 requestRouter.get('/', async (req, res) => {
   const binUUID = req.params.uuid
-  try {
-    const reqList = await request.getRequestsByBinUUID(binUUID)
-    if (reqList.length > 0) {
+  let valid = await bin.validUUID(binUUID)
+  if (valid) {
+    try {
+      const reqList = await request.getRequestsByBinUUID(binUUID)
       res.json(reqList)
-    } else {
-      res.status(404).send()
+    } catch (err) {
+      console.error(err)
     }
-  } catch (err) {
-    console.error(err)
+  } else {
+    res.status(404).send()
   }
 })
 
