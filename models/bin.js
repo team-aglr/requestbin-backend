@@ -8,7 +8,7 @@ const client = require('../db/pg.js');
 async function all() {
   try {
     const query = `SELECT bins.id, bins.uuid, 
-                          bins.created_at AS bin_created_at, 
+                          bins.created_at, 
                           MAX(requests.created_at) AS most_recent_request_date 
   		   FROM bins 
   		     LEFT JOIN requests ON bins.id = bin_id 
