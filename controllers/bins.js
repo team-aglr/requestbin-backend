@@ -2,7 +2,7 @@
 
 const binModel = require('../models/bin.js');
 const express = require('express');
-const router =  require("express").Router();
+const router =  express.Router();
 
 router.get("/api/bins", (request, response) => {
   try {
