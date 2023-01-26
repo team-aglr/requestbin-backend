@@ -15,8 +15,8 @@ router.get("/", async(request, response) => {
 
 router.post("/", async(request, response) => {
   try {
-    const newUUID = await binModel.newBin().uuid;
-    response.status(200).send(newUUID);
+    const newUUID = await binModel.newBin();
+    response.status(200).json(newUUID);
   } catch (error) {
     response.status(500).send(error)
   }
