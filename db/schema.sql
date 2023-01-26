@@ -3,7 +3,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 DROP TABLE IF EXISTS bins CASCADE;
 CREATE TABLE bins (
   id serial PRIMARY KEY,
-  uuid varchar(10) NOT NULL DEFAULT substring(gen_random_uuid()::text, 1, 8),
+  uuid varchar(10) NOT NULL DEFAULT substring(uuid_generate_v4()::text, 1, 8),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'UTC')
 );
 
