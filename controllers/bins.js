@@ -1,1 +1,25 @@
-// Creating bins, displaying bins, displaying all requests related to bins.
+// Creating a new bin & displaying all bins
+
+const binModel = require('../models/bin.js');
+const express = require('express');
+const router =  express.Router();
+
+router.get("/", async(request, response) => {
+  try {
+    const bins = await binModel.allBins();
+    response.status(200).json(bins);
+  } catch (error) {
+    response.status(500).send(error);
+  }
+});
+
+router.post("/", async(request, response) => {
+  try {
+    const newUUID = await binModel.newBin();
+    response.status(200).json(newUUID);
+  } catch (error) {
+    response.status(500).send(error)
+  }
+});
+
+module.exports = router;
