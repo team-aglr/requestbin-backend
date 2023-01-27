@@ -8,6 +8,7 @@ require("./db/pg.js").checkPGConnection();
 // Logging
 const morgan = require("morgan");
 const cors = require("cors");
+app.use(cors());
 
 // Connect to mongo
 require("./db/mongo.js");
@@ -19,10 +20,10 @@ const collectRouter = require("./controllers/collect");
 app.use("/collect", collectRouter);
 
 // Requests and Bins APIs
-const requestController = require('./controllers/requests.js');
-app.use('/api/bins/:uuid/requests', requestController)
+const requestController = require("./controllers/requests.js");
+app.use("/api/bins/:uuid/requests", requestController);
 
-const binController = require('./controllers/bins.js');
-app.use('/api/bins', binController)
+const binController = require("./controllers/bins.js");
+app.use("/api/bins", binController);
 
 module.exports = app;
