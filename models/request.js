@@ -49,7 +49,7 @@ async function getRequestsByBinUUID(uuid) {
   try {
     const bin = await client.query("SELECT requests.id AS id, http_method, \
       requests.created_at AS created_at, uuid\
-      FROM requests JOIN bins ON bin_id = bins.id WHERE uuid = $1", [uuid]);
+      FROM requests JOIN bins ON bin_id = bins.id WHERE uuid = $1 ORDER BY created_at DESC", [uuid]);
     return bin.rows;
   } catch (error) {
     console.error(error);
