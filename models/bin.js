@@ -54,11 +54,20 @@ async function validUUID(uuid) {
   return exists.rows[0].exists;
 }
 
+async function deleteBin(id) {
+  try {
+    await client.query("DELETE FROM bins WHERE id = $1", [id]);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const Bin = {
   createNew,
   findByUUID,
   all,
   validUUID,
+  deleteBin
 };
 
 module.exports = Bin;
