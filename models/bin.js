@@ -5,18 +5,24 @@
 
 const client = require("../db/pg.js");
 
-async function allBins() {
+async function all() {
   try {
-    const bins = await client.query(
-      "SELECT * FROM bins ORDER BY created_at DESC"
-    );
+    const query = `SELECT bins.id, bins.uuid, 
+                          bins.created_at, 
+                          MAX(requests.created_at) AS most_recent_request_date 
+  		   FROM bins 
+  		     LEFT JOIN requests ON bins.id = bin_id 
+ 		     GROUP BY bins.id 
+                     ORDER BY most_recent_request_date DESC NULLS LAST`;
+
+    const bins = await client.query(query);
     return bins.rows;
   } catch (error) {
     console.error(error);
   }
 }
 
-async function binByUUID(id) {
+async function findByUUID(id) {
   try {
     const bin = await client.query("SELECT id FROM bins WHERE uuid = $1", [id]);
     return bin.rows[0];
@@ -25,7 +31,7 @@ async function binByUUID(id) {
   }
 }
 
-async function newBin() {
+async function createNew() {
   try {
     const newUUID = await client.query(
       "INSERT INTO bins DEFAULT VALUES RETURNING id, uuid, created_at"
@@ -49,9 +55,9 @@ async function validUUID(uuid) {
 }
 
 const Bin = {
-  newBin,
-  binByUUID,
-  allBins,
+  createNew,
+  findByUUID,
+  all,
   validUUID,
 };
 
