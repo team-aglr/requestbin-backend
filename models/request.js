@@ -16,7 +16,7 @@ const Request = mongoose.model("Request", requestSchema);
 // Methods for Request model
 async function addRequest(uuid, method, head, body) {
   try {
-    const { id: binId } = await Bin.binByUUID(uuid);
+    const { id: binId } = await Bin.findByUUID(uuid);
 
     // Insert the request into the "requests" postgres table which links a request to a bin_id
     // The "Returning" keyword gives us back the id of the row we just added in the response
