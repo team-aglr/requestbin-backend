@@ -14,6 +14,7 @@ app.use(cors());
 require("./db/mongo.js");
 
 app.use(morgan("tiny"));
+app.use(express.static('build'));
 
 // Collect API
 const collectRouter = require("./controllers/collect");
