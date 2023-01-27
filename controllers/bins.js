@@ -1,12 +1,12 @@
 // Creating a new bin & displaying all bins
 
 const Bin = require('../models/bin.js');
-const requestModel = require('../models/request')
+const Request = require('../models/request')
 
 const express = require('express');
-const router =  express.Router();
+const router = express.Router();
 
-router.get("/", async(request, response) => {
+router.get("/", async (request, response) => {
   try {
     const bins = await Bin.all();
     response.status(200).json(bins);
@@ -15,7 +15,7 @@ router.get("/", async(request, response) => {
   }
 });
 
-router.post("/", async(request, response) => {
+router.post("/", async (request, response) => {
   try {
     const newUUID = await Bin.createNew();
     response.status(200).json(newUUID);
@@ -24,11 +24,11 @@ router.post("/", async(request, response) => {
   }
 });
 
-router.delete("/:id", async(request, response) => {
+router.delete("/:id", async (request, response) => {
   const binId = request.params.id
   try {
-    await binModel.deleteBin(binId)
-    await requestModel.deleteAllPerBin(binId)
+    await Bin.deleteBin(binId)
+    await Request.deleteAllPerBin(binId)
     response.status(204).send()
   } catch (error) {
     console.log(error)
