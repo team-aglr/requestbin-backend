@@ -14,6 +14,7 @@ app.use(cors());
 require("./db/mongo.js");
 
 app.use(morgan("tiny"));
+app.use(express.static('build'));
 
 // Collect API
 const collectRouter = require("./controllers/collect");
@@ -25,5 +26,13 @@ app.use("/api/bins/:uuid/requests", requestController);
 
 const binController = require("./controllers/bins.js");
 app.use("/api/bins", binController);
+
+// Handles any react paths
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 module.exports = app;
